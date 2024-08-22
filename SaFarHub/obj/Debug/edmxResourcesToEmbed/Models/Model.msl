@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SaFarHubDatabaseModelStoreContainer" CdmEntityContainer="SaFarHubDatabaseEntities">
+    <EntitySetMapping Name="FriendRequests">
+      <EntityTypeMapping TypeName="SaFarHubDatabaseModel.FriendRequest">
+        <MappingFragment StoreEntitySet="FriendRequests">
+          <ScalarProperty Name="friendRequestID" ColumnName="friendRequestID" />
+          <ScalarProperty Name="friendUsername" ColumnName="friendUsername" />
+          <ScalarProperty Name="toWhomeRequestUsername" ColumnName="toWhomeRequestUsername" />
+          <ScalarProperty Name="requestDateAndTime" ColumnName="requestDateAndTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FriendTagLists">
+      <EntityTypeMapping TypeName="SaFarHubDatabaseModel.FriendTagList">
+        <MappingFragment StoreEntitySet="FriendTagList">
+          <ScalarProperty Name="taggingID" ColumnName="taggingID" />
+          <ScalarProperty Name="postID" ColumnName="postID" />
+          <ScalarProperty Name="friendUsername" ColumnName="friendUsername" />
+          <ScalarProperty Name="friendUsernameWhoIsTagged" ColumnName="friendUsernameWhoIsTagged" />
+          <ScalarProperty Name="notificationSeen" ColumnName="notificationSeen" />
+          <ScalarProperty Name="clickedAndSeen" ColumnName="clickedAndSeen" />
+          <ScalarProperty Name="taggedDateTime" ColumnName="taggedDateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Pictures">
+      <EntityTypeMapping TypeName="SaFarHubDatabaseModel.Picture">
+        <MappingFragment StoreEntitySet="Pictures">
+          <ScalarProperty Name="pictureID" ColumnName="pictureID" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="pictureAddress" ColumnName="pictureAddress" />
+          <ScalarProperty Name="pictureCaption" ColumnName="pictureCaption" />
+          <ScalarProperty Name="uplaodDateTime" ColumnName="uplaodDateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PicturesComments">
+      <EntityTypeMapping TypeName="SaFarHubDatabaseModel.PicturesComment">
+        <MappingFragment StoreEntitySet="PicturesComments">
+          <ScalarProperty Name="commentID" ColumnName="commentID" />
+          <ScalarProperty Name="pictureID" ColumnName="pictureID" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="commentText" ColumnName="commentText" />
+          <ScalarProperty Name="commentedDateTime" ColumnName="commentedDateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PicturesLikes">
+      <EntityTypeMapping TypeName="SaFarHubDatabaseModel.PicturesLike">
+        <MappingFragment StoreEntitySet="PicturesLikes">
+          <ScalarProperty Name="likeID" ColumnName="likeID" />
+          <ScalarProperty Name="postID" ColumnName="postID" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="clickedLikeDateTime" ColumnName="clickedLikeDateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RecoveryReferences">
+      <EntityTypeMapping TypeName="SaFarHubDatabaseModel.RecoveryReference">
+        <MappingFragment StoreEntitySet="RecoveryReferences">
+          <ScalarProperty Name="recoveryID" ColumnName="recoveryID" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="recoveryEmail" ColumnName="recoveryEmail" />
+          <ScalarProperty Name="recoveryPhn" ColumnName="recoveryPhn" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="SaFarHubDatabaseModel.Role">
+        <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="roleID" ColumnName="roleID" />
+          <ScalarProperty Name="roleName" ColumnName="roleName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="SaFarHubDatabaseModel.User">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="firstName" ColumnName="firstName" />
+          <ScalarProperty Name="lastName" ColumnName="lastName" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="profilePicture" ColumnName="profilePicture" />
+          <ScalarProperty Name="role" ColumnName="role" />
+          <ScalarProperty Name="registrationDate" ColumnName="registrationDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UsersFriends">
+      <EntityTypeMapping TypeName="SaFarHubDatabaseModel.UsersFriend">
+        <MappingFragment StoreEntitySet="UsersFriends">
+          <ScalarProperty Name="userFriend" ColumnName="userFriend" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="friendsUsername" ColumnName="friendsUsername" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

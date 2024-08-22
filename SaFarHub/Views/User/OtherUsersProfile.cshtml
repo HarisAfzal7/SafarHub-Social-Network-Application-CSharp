@@ -1,0 +1,224 @@
+﻿@model SaFarHub.Models.User
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-image: url('/Images/back12.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        @@keyframes slide-in {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes fade-in {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @@keyframes zoom-in {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .add-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-button:hover {
+            background-color: darkgreen;
+        }
+
+        .add-button .button-text {
+            margin-right: 5px;
+        }
+        .cancel-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+            .cancel-button:hover {
+                background-color: darkgreen;
+            }
+
+            .cancel-button .button-text {
+                margin-right: 5px;
+            }
+    </style>
+</head>
+<body>
+    <div style="max-width: 800px; margin: 20px auto; background-color: #bababa; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); animation: slide-in 0.5s ease-out;">
+        <div style="padding: 20px; background-color: #f5f5f5; text-align: center;">
+            <h1 style="margin: 0; font-size: 24px; color: #333333; animation: fade-in 0.5s ease-out;">Profile</h1>
+        </div>
+        <div style="padding: 20px; animation: fade-in 0.5s ease-out;">
+            @{
+                if (ViewBag.profilingUser != null)
+                {
+                    SaFarHub.Models.User currentUser = ViewBag.profilingUser;
+                    SaFarHub.Models.Role myRole = ViewBag.myRole;
+                    <img src="@Url.Content(currentUser.profilePicture)" style="display: block; margin: 0 auto; width: 200px; height: 200px; border-radius: 50%; object-fit: cover; animation: zoom-in 0.5s ease-out;" alt="Profile Picture">
+                    <div style="margin-top: 20px; text-align: center; animation: fade-in 0.5s ease-out;">
+                        <p>Username: @currentUser.username</p>
+                        <p>Name: @currentUser.firstName @currentUser.lastName</p>
+                        <p>Role: @myRole.roleName</p>
+                        <p>Registration Date: @currentUser.registrationDate</p>
+                        <form method="post" action="/User/AddFriend">
+                            <input type="hidden" name="username" value="@currentUser.username" />
+                            <button type="submit" class="add-button">
+                                <span class="button-text">Add Friend</span>
+                            </button>
+                        </form>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <script>
+        // Add event listeners or custom JavaScript code here
+
+        // Example: Add a confirmation dialog for the delete button
+
+        const addButtonClicked = async (button) => {
+            const confirmAdd = confirm("Are you sure you want to add this friend?");
+            if (confirmAdd) {
+                const form = button.closest("form");
+                const formData = new FormData(form);
+                const url = form.getAttribute("action");
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const buttonText = button.querySelector(".button-text");
+                        buttonText.textContent = "Cancel Request";
+                        button.classList.remove("add-button");
+                        button.classList.add("cancel-button");
+
+                        // Change event listener to cancelButtonClicked
+                        button.removeEventListener("click", addButtonClicked);
+                        button.addEventListener("click", e => {
+                            e.preventDefault();
+                            cancelButtonClicked(button);
+                        });
+
+                        // Update the form action attribute to the cancel request URL
+                        form.setAttribute("action", "/User/CancelRequest");
+                    } else {
+                        console.error('Request failed with status', response.status);
+                    }
+                } catch (error) {
+                    console.error('Request failed with error', error);
+                }
+            }
+        };
+
+        const cancelButtonClicked = async (button) => {
+            const confirmCancel = confirm("Are you sure you want to cancel the friend request?");
+            if (confirmCancel) {
+                const form = button.closest("form");
+                const formData = new FormData(form);
+                const url = form.getAttribute("action");
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const buttonText = button.querySelector(".button-text");
+                        buttonText.textContent = "Add Friend";
+                        button.classList.remove("cancel-button");
+                        button.classList.add("add-button");
+
+                        // Change event listener to addButtonClicked
+                        button.removeEventListener("click", cancelButtonClicked);
+                        button.addEventListener("click", e => {
+                            e.preventDefault();
+                            addButtonClicked(button);
+                        });
+
+                        // Update the form action attribute to the add friend URL
+                        form.setAttribute("action", "/User/AddFriend");
+                    } else {
+                        console.error('Request failed with status', response.status);
+                    }
+                } catch (error) {
+                    console.error('Request failed with error', error);
+                }
+            }
+        };
+
+
+        const addButtons = document.querySelectorAll(".add-button");
+        addButtons.forEach(button => {
+            button.addEventListener("click", e => {
+                e.preventDefault();
+                addButtonClicked(button);
+            });
+        });
+
+        const cancelButtons = document.querySelectorAll(".cancel-button");
+        cancelButtons.forEach(button => {
+            button.addEventListener("click", e => {
+                e.preventDefault();
+                cancelButtonClicked(button);
+            });
+        });
+
+
+    </script>
+</body>
+</html>

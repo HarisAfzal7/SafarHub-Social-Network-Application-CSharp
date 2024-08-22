@@ -1,0 +1,260 @@
+﻿@model SaFarHub.Models.User
+@{
+    ViewBag.Title = "AdminHome";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            padding: 10px;
+        }
+
+        .navbar {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+            .navbar li {
+                display: inline;
+                margin-right: 10px;
+            }
+
+                .navbar li a {
+                    color: #fff;
+                    text-decoration: none;
+                }
+
+
+        .content {
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .header-section {
+            text-align: center;
+        }
+
+        .main-section {
+            margin: 0 20px;
+        }
+
+        .dashboard-summary {
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .summary-item {
+            text-align: center;
+        }
+
+        .settings-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+
+        .settings-item {
+            align-items: center;
+        }
+
+
+        .settings-details {
+            margin-left: 10px;
+        }
+
+        .delete-button {
+            background-color: #ff0000;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .profileImage {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .postImage {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10%;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .signup-button,
+        .username,
+        .pictureID {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .managementDiv {
+            width: 280px;
+            border: 1px solid;
+            border-radius: 5px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 10px;
+            background-color: cornflowerblue;
+        }
+
+            .managementDiv h4 {
+                margin-top: 5px;
+            }
+    </style>
+</head>
+
+
+<section class="content" style="margin-bottom: 100px; margin-top: 70px;">
+    <div class="header-section">
+        <h3>Welcome, Admin!</h3>
+        @if (Session["Admin"] != null)
+        {
+            var user = (SaFarHub.Models.User)Session["Admin"];
+            <img src="@Url.Content(user.profilePicture)" class="profileImage" alt="Admin Profile Picture">
+            <h4>Admin Name @user.firstName @user.lastName</h4>
+        }
+
+    </div>
+
+    <div class="main-section">
+        <div class="dashboard-summary">
+            <div class="summary-item">
+                <h5>Total Users</h5>
+                @if (TempData["totalUsers"] != null)
+                {
+                    <p>@TempData["totalUsers"]</p>
+                }
+            </div>
+            <div class="summary-item">
+                <h5>Total Posts</h5>
+                @if (TempData["totalPost"] != null)
+                {
+                    <p>@TempData["totalPost"]</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    @if (Session["Admin"] != null || Session["Admin"] == null)
+    {
+        <div class="sidebar fixed-top" style="margin-top:100px; margin-left:30px">
+            <h4>Settings</h4>
+            <ul class="settings-list">
+                @*<li>@Html.ActionLink("General Setting", "GeneralSetting", new { id = admin.username})</li>
+                    <li>@Html.ActionLink("Privacy Settings", "PrivacySetting", new { id = admin.username})</li>
+                    <li>@Html.ActionLink("Security Settings", "SecuritySetting", new { id = admin.username})</li>*@
+                <li>@Html.ActionLink("General Setting", "GeneralSetting")</li>
+                <li>@Html.ActionLink("Privacy Settings", "PrivacySetting")</li>
+                <li>@Html.ActionLink("Security Settings", "SecuritySetting")</li>
+                <li>@Html.ActionLink("Email Notifications", "EmailNotification")</li>
+            </ul>
+        </div>
+    }
+
+    <hr style="height:10px" />
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 col-xs-12" style="text-align: center; margin-left: auto; margin-right: auto;">
+                <div>
+                    <div class="managementDiv">
+                        <h4><b>User Management</b></h4>
+                    </div>
+                    @{
+                        var userCount = ((List<SaFarHub.Models.User>)ViewBag.userData).Count;
+                        var startIndex = 0;
+                        if (userCount > 2)
+                        {
+                            startIndex = userCount - 2;
+                        }
+                        for (var i = startIndex; i < userCount; i++)
+                        {
+                            var userItem = ((List<SaFarHub.Models.User>)ViewBag.userData)[i];
+                            <img src="@Url.Content(userItem.profilePicture)" alt="Profile Pic" class="profileImage">
+                            <div>
+                                @using (Html.BeginForm("DeleteUser", "User", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.TextBoxFor(model => model.username, new { @class = "form-control username", @readonly = "readonly", id = userItem.username })
+                                    <p>Email: @userItem.email</p>
+                                    <p>Joined: @userItem.registrationDate</p>
+                                    <input type="submit" value="Delete" class="btn signup-button form-group" />
+                                    <br /><br />
+                                }
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 col-xs-12" style="text-align: center;">
+
+                <div>
+                    <div class="managementDiv">
+                        <h4><b>Post Management</b></h4>
+                    </div>
+                    @{
+                        var postCount = ((List<SaFarHub.Models.Picture>)ViewBag.postData).Count;
+                        var startIndexForPost = 0;
+                        if (postCount > 2)
+                        {
+                            startIndexForPost = postCount - 2;
+                        }
+                        for (var i = startIndexForPost; i < postCount; i++)
+                        {
+
+                            var dataItem = ((List<SaFarHub.Models.Picture>)ViewBag.postData)[i];
+                            <img src="@Url.Content(dataItem.pictureAddress)" alt="Post From @dataItem.username" class="postImage">
+                            <div>
+
+                                @using (Html.BeginForm("DeletePicture", "User", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <h5>Posted By @dataItem.username</h5>
+                                    @Html.TextBoxFor(model => model.role, new { @class = "form-control pictureID", @readonly = "readonly", id = dataItem.pictureID })
+                                    <p>DateTime: @dataItem.uplaodDateTime</p>
+                                    <input type="submit" value="Delete" class="btn signup-button form-group" />
+                                    <br /><br />
+                                }
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    var buttons = document.querySelectorAll(".username");
+    buttons.forEach(button => {
+        button.value = button.id;
+    });
+    var post = document.querySelectorAll(".pictureID");
+    post.forEach(button => {
+        button.value = button.id;
+    });
+</script>

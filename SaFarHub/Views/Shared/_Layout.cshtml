@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/HomeStyleSheet.css" rel="stylesheet" type="text/css" />
+
+    <!--I inluded the javascript file for layout-->
+    <script src="~/Content/LayoutJavaScript.js"></script>
+    <!--Jquery script CDN path link-->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+
+    <script src="~/Content/jquery.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+</head>
+<body>
+
+    <header class="main-header shadow fixed-top">
+        <div class="nav navbar">
+            <a href="#" class="h2 logoLink">
+                <img src="~/Images/defaultProfilePicture.png" class="d-inline-block align-top" width="45" height="45">
+                SaFar-Hub
+            </a>
+
+            <div class="searchBar">
+                <label for="">
+                    <span class="searchIcon"><i class="bi bi-search"></i></span>
+                    <input type="search" name="search" id="search" placeholder="Search">
+                </label>
+            </div>
+
+
+            <div class="profileMainDiv">
+                <div class="profileDivs notification">
+                    <a href=""><i class="bi bi-messenger"></i></a>
+                </div>
+                <div class="profileDivs notification">
+                    <i class="bi bi-heart-fill" onclick="getNotifications()" id="notification"></i>
+                </div>
+                <div class="profileDivs">
+                    <label for="profilMenu">
+
+                        <a href="#"><img id="profilMenu" src="~/Images/defaultProfilePicture.png" alt="#"></a>
+                        <div class="iconDiv">
+                            <span class="profilMenuIcon"><b> <button class="bi bi-chevron-down" id="profilMenuIcon"></button></b> </span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div id="notification-box" class="shadow">
+                <!--All Notifications append here-->
+            </div>
+
+            <div id="profile-box" class="shadow">
+                @Html.ActionLink("Home", "Home", "User", null, new { @style = "text-decoration: none;", @class = "nav-link" })
+                @Html.ActionLink("Log Out", "Login", "User", null, new { @style = "text-decoration: none;", @class = "nav-link" })
+                @Html.ActionLink("Setting", "Home", "User", null, new { @style = "text-decoration: none;", @class = "nav-link" })
+                @Html.ActionLink("Privacy", "Home", "User", null, new { @style = "text-decoration: none;", @class = "nav-link" })
+                @Html.ActionLink("Profile", "Home", "User", null, new { @style = "text-decoration: none;", @class = "nav-link" })
+            </div>
+        </div>
+    </header>
+
+
+
+
+    <div class="container body-content">
+        @RenderBody()
+
+
+
+
+        <footer>
+
+
+
+
+
+        </footer>
+    </div>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+
+
+    <script src="~/Content/LayoutJavaScript.js">
+
+    </script>
+</body>
+</html>

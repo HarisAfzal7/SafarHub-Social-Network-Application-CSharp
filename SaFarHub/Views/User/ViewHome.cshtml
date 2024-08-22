@@ -1,0 +1,527 @@
+﻿@model SaFarHub.Models.User
+
+@{
+    ViewBag.Title = "ViewHome";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    SaFarHub.Models.User user = (SaFarHub.Models.User)Session["User"];
+
+    SaFarHub.Models.User postUser = new SaFarHub.Models.User();
+
+}
+
+<head>
+    <link href="~/Content/HomeStyleSheet.css" rel="stylesheet" type="text/css" />
+
+    <!--I inluded the javascript file for layout-->
+    <script src="~/Content/LayoutJavaScript.js"></script>
+    <script src="~/Content/jquery.js"></script>
+</head>
+
+
+<div class="left">
+    <nav class="sidebar">
+        <header>
+            <h2 style="margin-bottom:0;">Menu</h2>
+            <hr style="height:5px;" />
+        </header>
+        <div class="scrollbox">
+            <div class="scrollbox-inner" style="font-size:30px;">
+
+                <div style=" margin-top: 10px; font-size: 25px;"><a href="#" style="text-decoration: none;color: white;"><i class="bi bi-house-door-fill" style="font-size:35px;"></i> Home</a></div>
+                <div style=" margin-top: 10px; font-size: 25px;"><a href="#" style="text-decoration: none; color: white;"><i class="bi bi-search" style="font-size:35px;"></i> Search</a></div>
+                <div style=" margin-top: 10px; font-size: 25px;"><a href="#" style="text-decoration: none; color: white;"><i class="bi bi-patch-plus-fill" style="font-size:35px;"></i> @Html.ActionLink("Post", "Post", null, new { @style = "text-decoration: none; color:#fff;" })</a></div>
+                <div style=" margin-top: 10px; font-size: 25px;"><a href="#" style="text-decoration: none; color: white;"><i class="bi bi-person-circle" style="font-size:35px;"></i> Profile</a></div>
+                <div style=" margin-top: 10px; font-size: 25px;"><a href="#" style="text-decoration: none;color: white;"><i class="bi bi-collection-play-fill" style="font-size:35px;"></i> Videos</a></div>
+                <div style=" margin-top: 10px; font-size: 25px;"><a href="#" style="text-decoration: none;color: white;"><i class="bi bi-people-fill" style="font-size:35px;"></i></i> @Html.ActionLink("All Users", "ShowAllUsers", null, new { @style = "text-decoration: none; color:#fff;" })</a></div>
+                <div style=" margin-top: 10px; font-size: 25px;"><a href="#" style="text-decoration: none;color: white;"><i class="bi bi-people-fill" style="font-size:35px;"></i></i> @Html.ActionLink("My Friends", "Friends", null, new { @style = "text-decoration: none; color:#fff;" })</a></div>
+                <div style=" margin-top: 10px; font-size: 25px;"><a href="#" style="text-decoration: none;color: white;"><i class="bi bi-person-plus-fill" style="font-size:35px;"></i> @Html.ActionLink("Friend Request", "ShowFriendRequests", null, new { @style = "text-decoration: none; color:#fff;" })</a></div>
+            </div>
+        </div>
+        <footer class="fixed-bottom" style="margin-left:20px; width:200px;">
+            <b>@Html.ActionLink("Log Out", "Login", "User", null, new { @style = "width:100%; text-decoration: none; color:#fff; font-size:25px;", @class = "nav-link" })</b>
+        </footer>
+    </nav>
+</div>
+
+
+<div class="content" id="content">
+    <div class="container-fluid" style="margin-bottom:20px">
+
+        @{
+            if (ViewBag.PostList != null)
+            {
+                List<List<SaFarHub.Models.Picture>> pictureList = ViewBag.PostList;
+                List<List<SaFarHub.Models.PicturesComment>> picturesCommentsList = ViewBag.PostCommentList;
+                List<SaFarHub.Models.PicturesLike> picturesLikesList = ViewBag.PostLikeList;
+                List<SaFarHub.Models.User> userFriendsList = ViewBag.friends;
+                foreach (List<SaFarHub.Models.Picture> itemList in pictureList)
+                {
+                    if (itemList != null)
+                    {
+                        foreach (var item in itemList)
+                        {
+                            if (item != null)
+                            {
+                                var picture = (SaFarHub.Models.Picture)item;
+                                foreach (var friend in userFriendsList)
+                                {
+                                    if (friend != null)
+                                    {
+                                        if (friend.username == item.username)
+                                        {
+                                            postUser = friend;
+                                        }
+                                    }
+                                }
+                                if (user.username == picture.username)
+                                {
+                                    postUser = user;
+                                }
+                                <div class="shadow container-inner">
+                                    <div class="profileDivUponPos" style="margin: 5px 0 5px 10px; position: relative; float: left;">
+                                        <img src="@Url.Content(postUser.profilePicture)" alt="Profile Picture">  <!--Here I can add Id for Profile image as username of the user-->
+                                    </div>
+                                    <div style="width: 50%; position: relative; text-align: left; padding-left: 75px;">
+                                        <a href="#" style="text-decoration: none;">
+                                            <h5 class="username" style="margin: 0; left: 0; padding: 0; margin-top: 20px; color: #050505;"><b>@postUser.firstName @postUser.lastName</b></h5>
+                                        </a>
+                                    </div>
+                                    <div style="text-align: left; margin-left: 12px; margin-right: 12px; margin-bottom: 2px; border-radius: 5px;  margin-top: 20px; padding: 4 10px; border: 1px solid rgb(209, 209, 209); background-color: #ddd;">
+                                        <p>@picture.pictureCaption</p>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div class="container-fluid">
+                                            <img src="@Url.Content(picture.pictureAddress)" alt="user Post" class="img-fluid post" width="100%">
+                                        </div>
+                                        <div class="icons">
+                                            @if (picturesLikesList.Count > 0)
+                                            {
+                                                foreach (var like in picturesLikesList)
+                                                {
+                                                    if (like != null)
+                                                    {
+                                                        if (like.username == user.username)
+                                                        {
+                                                            <a href="#"><i class="bi bi-heart-fill" style="color:red;"></i></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="#"><i class="bi bi-heart-fill"></i></a>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="#"><i class="bi bi-heart-fill"></i></a>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <a href="#"><i class="bi bi-heart-fill"></i></a>
+                                            }
+                                            <i class="bi bi-chat-dots comment" id="commentBoxID" value="@picture.pictureID"></i>
+                                            <a href="#"><i class="bi bi-send-fill"></i></a>
+
+                                        </div>
+                                    </div>
+                                    <div id="@picture.pictureID" class="hidden">
+                                        <div>
+                                            @foreach (List<SaFarHub.Models.PicturesComment> commentList in picturesCommentsList)
+                                            {
+                                                if (commentList != null)
+                                                {
+                                                    foreach (SaFarHub.Models.PicturesComment singlePostComments in commentList)
+                                                    {
+                                                        if (singlePostComments.pictureID == picture.pictureID)
+                                                        {
+                                                            if (singlePostComments.username == user.username)
+                                                            {
+
+                                                                <label id="commentLable" for="" style="width: auto; padding: 10px 0; border-radius: 10px; margin:0 10px; margin-bottom: 10px;">
+                                                                    <div class="profileDivs" style="margin-left: 15px; float: left;">
+                                                                        <img src="@Url.Content(user.profilePicture)" alt="Profile Picture Who Commented">
+                                                                    </div>
+                                                                    <h6 style="padding: 0; margin: 0; margin-left: 70px;"><b>@user.firstName @user.lastName</b></h6>
+                                                                    <p class="commentParagraph">@singlePostComments.commentText</p>
+                                                                </label>
+                                                                <br />
+                                                                <hr />
+                                                            }
+                                                            else
+                                                            {
+                                                                foreach (var userFriendForComment in userFriendsList)
+                                                                {
+                                                                    if (userFriendForComment.username == singlePostComments.username)
+                                                                    {
+                                                                        <label id="commentLable" for="" style="width: auto; padding: 10px 0; border-radius: 10px; margin:0 10px; margin-bottom: 10px;">
+                                                                            <div class="profileDivs" style="margin-left: 15px; float: left;">
+                                                                                <img src="@Url.Content(userFriendForComment.profilePicture)" alt="Profile Picture Who Commented">
+                                                                            </div>
+                                                                            <h6 style="padding: 0; margin: 0; margin-left: 70px;"><b>@userFriendForComment.firstName @userFriendForComment.lastName</b></h6>
+                                                                            <p class="commentParagraph">@singlePostComments.commentText</p>
+                                                                        </label>
+                                                                        <br />
+                                                                        <hr />
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        </div>
+                                        <div class="comment-container">
+                                            <div class="comment-input-container">
+                                                <textarea type="text" id="@picture.pictureID" class="@picture.username commentTextBox" placeholder="Type your comment here..."></textarea>
+                                            </div>
+                                            <button id="post-button" value="@picture.pictureID">Post</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                }
+            }
+
+
+        }
+    </div>
+
+</div>
+
+<div class="right">
+    <nav class="sidebar-right">
+        <header>
+            <h2 style="margin-bottom:0;">My Friends</h2>
+            <div style="margin-bottom:5px;"><a href="#" style="text-decoration: none; color: white;"><i class="bi bi-search"></i> Search</a></div>
+            <hr style="height:5px;" />
+        </header>
+        <div class="scrollbox">
+            @if (ViewBag.friends != null)
+            {
+                List<SaFarHub.Models.User> userFriendsList = ViewBag.friends;
+                foreach (var item in userFriendsList)
+                {
+                    if (item != null)
+                    {
+                        <div class="scrollbox-inner" style="display: flex; flex-direction: row; margin-top: 10px;">
+                            @if (!string.IsNullOrEmpty(item.profilePicture))
+                            {
+                                <form method="post" action="@Url.Action("Profile", "UsersFriend")">
+                                    <input type="hidden" name="username" value="@item.username" />
+                                    <button type="submit" class="profile-button" style="border: none; background: none; padding: 0; margin: 0; cursor: pointer;">
+                                        <img src="@Url.Content(item.profilePicture)" class="d-inline-block align-top" width="45" height="45" />
+                                    </button>
+                                </form>
+                            }
+
+                            <h3 style="margin: 6px 0 0 8px; font-size: 1.3rem; position: relative;">
+                                <form method="post" action="@Url.Action("Profile", "UsersFriend")">
+                                    <input type="hidden" name="username" value="@item.username" />
+                                    <button type="submit" class="profile-button" style="border: none; background: none; padding: 0; margin: 10px 0 0 0; cursor: pointer; color:#fff;"><b>@item.firstName @item.lastName</b></button>
+                                </form>
+                            </h3>
+                        </div>
+                        <br />
+                        <hr />
+                    }
+                }
+            }
+
+
+        </div>
+    </nav>
+</div>
+
+
+
+<!--I inluded the javascript file for layout-->
+<script src="~/Content/LayoutJavaScript.js"></script>
+
+<script>
+
+
+    function redirectToProfile(username) {
+        $.ajax({
+            url: '@Url.Action("Profile", "UsersFriend")',
+            type: 'POST',
+            data: { username: username },
+            success: function () {
+                var url = '@Url.Action("Profile", "UsersFriend")' + '?username=' + encodeURIComponent(username);
+                window.location.href = url;
+            },
+
+            error: function (xhr, status, error) {
+                // Handle the error response if needed
+                console.log(error);
+            }
+        });
+    }
+
+
+
+    //Profile Setting Box
+    var mycomment = "";
+
+    var profileBox = document.getElementById("profile-box");
+    var showProfileButton = document.getElementById("profilMenuIcon");
+
+
+    var isProfileBoxVisible = false;
+
+    showProfileButton.addEventListener("click", function () {
+        if (isProfileBoxVisible) {
+            hideProfileBox();
+        } else {
+            showProfileBox();
+        }
+    });
+
+    function showProfileBox() {
+        profileBox.style.display = "block";
+        isProfileBoxVisible = true;
+        setTimeout(function () {
+            document.addEventListener("click", handleProfileBoxOutsideClick);
+        }, 0);
+    }
+
+    function hideProfileBox() {
+        profileBox.style.display = "none";
+        isProfileBoxVisible = false;
+        document.removeEventListener("click", handleProfileBoxOutsideClick);
+    }
+
+    function handleProfileBoxOutsideClick(event) {
+        if (!profileBox.contains(event.target) && event.target !== showProfileButton) {
+            hideProfileBox();
+        }
+    }
+
+
+
+
+    //Notificatoin Box
+
+    var notificationBox = document.getElementById("notification-box");
+    var showButton = document.getElementById("notification");
+
+
+    var isBoxVisible = false;
+
+    showButton.addEventListener("click", function () {
+        if (isBoxVisible) {
+            hideNotificationBox();
+        } else {
+            showNotificationBox();
+        }
+    });
+
+    function showNotificationBox() {
+        notificationBox.style.display = "block";
+        isBoxVisible = true;
+        setTimeout(function () {
+            document.addEventListener("click", handleOutsideClick);
+        }, 0);
+    }
+
+    function hideNotificationBox() {
+        notificationBox.style.display = "none";
+        isBoxVisible = false;
+        document.removeEventListener("click", handleOutsideClick);
+    }
+
+    function handleOutsideClick(event) {
+        if (!notificationBox.contains(event.target) && event.target !== showButton) {
+            if (window.notificationBoxOpened) {
+                window.notificationBoxOpened = false;
+                console.log("Yes Closed: ", window.notificationBoxOpened);
+                var notificationBoxBody2 = window.document.getElementById("notification-box");
+                notificationBoxBody2.innerHTML = "";
+            }
+            hideNotificationBox();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //For Comment Box
+
+
+    const allCommentBoxArea = document.querySelectorAll(".commentTextBox");
+    allCommentBoxArea.forEach(singleCommentTextBox => {
+        singleCommentTextBox.addEventListener('input', showPostButton);
+
+        function showPostButton() {
+            const postElementbyValue = document.querySelector('button[value="' + singleCommentTextBox.getAttribute('id') + '"]');
+            if (singleCommentTextBox.value.length > 0) {
+                mycomment = singleCommentTextBox.value;
+                postElementbyValue.style.display = "block";
+            } else {
+                postElementbyValue.style.display = "none";
+            }
+        }
+    });
+
+
+
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////// Comment Post Button
+
+    var allCommentPostButtons = document.querySelectorAll("#post-button");
+    allCommentPostButtons.forEach(button => {
+        button.addEventListener('click', postComment);
+        function postComment() {
+            //var commentInput = document.getElementById(button.getAttribute('value'));
+            //var userName = commentInput.classList.item(0);
+            var postIdForComment = button.getAttribute('value');
+            //var commentInput = document.getElementById(postIdForComment);
+            //var comment = commentInput.value;
+
+            //console.log("comment value ", commentInput.value)
+            //console.log("Comment ID:", postIdForComment)
+            //console.log("Comment:", comment);
+
+            //console.log("commentInput element:", commentInput);
+            //console.log("commentInput value:", commentInput.value);
+            //console.log("My comment:", mycomment);
+
+            //Code for database input
+
+
+            $.ajax({
+                url: '/PicturesComment/PostComment',
+                method: 'POST',
+                data: {
+                    postId: postIdForComment,
+                    commentValue: mycomment
+                },
+                success: function (data) {
+                    console.log('AJAX request successful');
+                    console.log(data);
+
+                    //console.log(data);
+
+
+                    //var notifictaionBoxBody = document.getElementById("notification-box");
+                    //const allNotifications = JSON.parse(data);
+
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.log('AJAX request error');
+                    console.log(textStatus);
+                }
+            });
+
+
+            // Perform further actions with the comment (e.g., send it to a server, display it on the page, etc.)
+
+            // Clear the comment input field
+            //commentInput.value = "";
+
+            // Hide the post button again
+            //var postButton = document.getElementById("post-button");
+            button.style.display = "none";
+        }
+    });
+
+
+
+
+
+
+    //var button = document.getElementById("commentBoxID");
+    //var content = document.getElementById("commentContent");
+
+
+    const commentButtons = document.querySelectorAll("#commentBoxID");
+    commentButtons.forEach(button => {
+        button.addEventListener('click', expendCommentBox);
+        function expendCommentBox() {
+
+            var content = document.getElementById(button.getAttribute('value'));
+            //button.addEventListener("click", function () {
+                content.classList.toggle("hidden");
+            //});
+            //if (button.value == randomIndex) {
+            //    alert("You Guessed the right button: Try Again");
+            //} else {
+            //    alert("You Guessed the wrong button: Try it Again");
+            //}
+            //pTag.innerHTML = "ID of random Button choosed by JS was: " + randomIndex;
+            //randomIndex = Math.floor(Math.random() * buttons.length);
+            //console.log(randomIndex);
+        }
+    });
+
+    //var allCommnetButtons = document.querySelectorAll("#commentBoxID");
+    //allCommnetButtons.forEach(function (button) {
+    //    button.addEventListener('click', function () {
+    //        // Find the associated content element
+    //        var content = this.getElementById("commentContent");
+
+    //        // Toggle the visibility of the content
+    //        if (content.style.display === 'none') {
+    //            content.style.display = 'block';
+    //        } else {
+    //            content.style.display = 'none';
+    //        }
+    //    });
+    //});
+
+
+    //button.addEventListener("click", function () {
+    //    content.classList.toggle("hidden");
+    //});
+
+
+
+
+
+
+
+
+    // Get the body element
+    var body = document.body;
+
+    // Set a threshold value to determine how close to the end you consider "near"
+    var threshold = 200; // Adjust this value as needed
+
+    // Function to check if the scrollbar is near the end of the body
+    function checkScrollbarPosition() {
+        // Calculate the height of the body element
+        var bodyHeight = body.scrollHeight;
+
+        // Calculate the current scroll position
+        var scrollPosition = window.innerHeight + window.pageYOffset;
+
+        // Check if the scroll position is within the threshold distance from the bottom of the body
+        if (bodyHeight - scrollPosition <= threshold) {
+            //Code needed here to add another div to the main div called content
+        } else if (bodyHeight - scrollPosition <= 0) {
+            console.log('Scrollbar is not near the end of the body.');
+        }
+    }
+
+    // Event listener for the scroll event
+    window.addEventListener('scroll', function () {
+        // Call the function to check the scrollbar position
+        checkScrollbarPosition();
+    });
+
+
+
+</script>

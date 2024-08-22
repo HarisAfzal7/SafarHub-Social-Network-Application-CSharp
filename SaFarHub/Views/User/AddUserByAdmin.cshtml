@@ -1,0 +1,215 @@
+﻿@model SaFarHub.Models.User
+
+@{
+    ViewBag.Title = "AddUserByAdmin";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <!--Link for online bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!--Link for my own stylesheet-->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <link rel="stylesheet" type="text/css" href="css/loginPage.css">
+    <!--Link for Icons-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!--Link for Icons from fontawesome-->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+
+
+    <script src="~/Content/jquery.js"></script>
+
+    <title>Register | SaFar-Hub</title>
+
+
+    <style>
+        .inputFieldStyle {
+            display: block;
+            width: 100%;
+            padding: 5px;
+            margin: 5px auto;
+        }
+
+        .signup-container {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .signup-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .file-input-text {
+            display: none;
+        }
+
+        /* Style the custom file input button */
+        .file-input-label {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        /* Style the profile logo image */
+        #profile-logo {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .profile-logo-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        /* Style the profile logo image */
+
+
+        /* Style the image icon */
+        .image-icon {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 30px;
+            height: 30px;
+            align-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+        }
+
+            .image-icon .bi {
+                color: violet;
+                font-size: 25px
+            }
+        /* Show the image icon when hovering over the profile logo container */
+        .profile-logo-container:hover .image-icon {
+            display: block;
+        }
+    </style>
+
+
+
+
+
+
+
+</head>
+
+<div class="signup-container" style="margin-top: 70px;">
+
+    @using (Html.BeginForm("AddUserByAdmin", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <h2 style="margin-bottom: 20px;">Signup</h2>
+
+        <!-- Profile logo display -->
+        <div class="profile-logo-container">
+            <label for="ImageFile">
+                <img id="profile-logo" src="~/Images/defaultProfilePicture.png" alt="Profile Logo">
+                <input type="file" id="ImageFile" name="ImageFile" accept="image/*" style="display: none;">
+                <div class="image-icon">
+                    <i class="bi bi-image-fill"></i>
+                </div>
+            </label>
+        </div>
+        <div class="form-group" style="margin-bottom: 10px;">
+            @Html.TextBoxFor(model => model.firstName, new { @class = "form-control  inputFieldStyle", placeholder = "First Name" })
+
+        </div>
+        <div class="form-group" style="margin-bottom: 10px;">
+            @Html.TextBoxFor(model => model.lastName, new { @class = "form-control  inputFieldStyle", placeholder = "Last Name" })
+        </div>
+        <div class="form-group" style="margin-bottom: 10px;">
+            @Html.TextBoxFor(model => model.username, new { @class = "form-control  inputFieldStyle", placeholder = "username" })
+        </div>
+        <div class="form-group" style="margin-bottom: 10px;">
+            @Html.TextBoxFor(model => model.email, new { @class = "form-control inputFieldStyle", placeholder = "Enter Your Email", type = "email" })
+        </div>
+        <div class="form-group" style="margin-bottom: 10px;">
+            @Html.PasswordFor(model => model.password, new { @class = "form-control inputFieldStyle", placeholder = "Password" })
+        </div>
+        <div class="form-group" style="margin-bottom: 10px;">
+            @if (ViewBag.roles != null)
+            {
+                var roles = (List<SaFarHub.Models.Role>)ViewBag.roles;
+                foreach (var item in roles)
+                {
+                    @Html.RadioButtonFor(model => model.Role1, item.roleID, new { @id = item.roleID, value = item.roleName })
+                    <label for=@item.roleID>@item.roleName</label>
+                    <br />
+                }
+            }
+        </div>
+
+        <div class="form-group" style="margin-bottom:15px;">
+            <input type="submit" value="Signup" class="btn signup-button form-group" />
+        </div>
+    }
+
+    @if (TempData["AlertMessage"] != null)
+    {
+        <div class="alert alert-danger"> <strong>Error!</strong> @TempData["AlertMessage"] </div>
+    }
+    @if (TempData["UserAdded"] != null)
+    {
+        <div class="alert alert-success"> <strong>Success! </strong> @TempData["UserAdded"] </div>
+    }
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+
+<script style="margin-bottom: 100px;">
+    // Flag to track if file selection is already triggered
+    var fileSelectionTriggered = false;
+
+    // Function to display the selected picture as a profile logo
+    function displayProfileLogo() {
+        var input = document.getElementById('ImageFile');
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            document.getElementById('profile-logo').src = e.target.result;
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+
+    // Trigger file input click when the profile logo is clicked
+    document.getElementById('profile-logo');
+
+    // Event listener for file input change
+    document.getElementById('ImageFile').addEventListener('change', function () {
+        displayProfileLogo();
+    }, false);
+
+    // Reset the flag after file input loses focus
+    document.getElementById('ImageFile').addEventListener('blur', function () {
+        fileSelectionTriggered = false;
+    });
+</script>

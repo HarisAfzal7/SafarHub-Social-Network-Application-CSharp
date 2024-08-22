@@ -1,0 +1,176 @@
+﻿@model SaFarHub.Models.User
+
+@{
+    ViewBag.Title = "AllPost";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            padding: 10px;
+        }
+
+        .navbar {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+            .navbar li {
+                display: inline;
+                margin-right: 10px;
+            }
+
+                .navbar li a {
+                    color: #fff;
+                    text-decoration: none;
+                }
+
+
+        .content {
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .header-section {
+            text-align: center;
+        }
+
+        .main-section {
+            margin: 0 20px;
+        }
+
+        .dashboard-summary {
+            margin-top: 20px;
+        }
+
+        .summary-item {
+            text-align: center;
+        }
+
+        .sidebar {
+            width: 250px;
+            margin-right: 20px;
+        }
+
+        .user-list,
+        .post-list,
+        .settings-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .user-item,
+        .post-item,
+        .settings-item {
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .user-details,
+        .post-details,
+        .settings-details {
+            margin-left: 10px;
+        }
+
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .profileImage {
+            margin-right: 10px;
+        }
+
+        .postPicture {
+            width: 500px;
+            height: 550px;
+            object-fit: cover;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+
+<section class="content" style="margin-bottom: 110px; margin-top: 70px;">
+    <div class="header-section">
+        <h3>Welcome, Admin!</h3>
+        @if (Session["Admin"] != null)
+        {
+            var user = (SaFarHub.Models.User)Session["Admin"];
+            <img src="@Url.Content(user.profilePicture)" class="profileImage" alt="Admin Profile Picture">
+            <h4>Admin Name @user.firstName @user.lastName</h4>
+        }
+    </div>
+    <div class="main-section">
+        <div class="dashboard-summary">
+            <div class="summary-item">
+                <h5>Total Posts</h5>
+                @if (TempData["totalPost"] != null)
+                {
+                    <p>@TempData["totalPost"]</p>
+                }
+            </div>
+        </div>
+    </div>
+    <hr style="height:12px" />
+
+    <div class="container div-container" style="margin-top: 20px;">
+
+        @{
+            var postCount = ((List<SaFarHub.Models.Picture>)ViewBag.postData).Count;
+            for (var i = 0; i < postCount; i++)
+            {
+
+                var dataItem = ((List<SaFarHub.Models.Picture>)ViewBag.postData)[i];
+                using (Html.BeginForm("DeletePicture", "User", FormMethod.Post))
+                {
+                    <div class="row">
+                        @Html.AntiForgeryToken()
+                        <div class="col-2 offset-3" style="text-align: center;">
+                            <p>Uploaded By: @dataItem.username</p>
+                        </div>
+                        <div class="col-2" style="text-align: center;">
+                            @Html.TextBoxFor(model => model.role, new { @class = "form-control pictureID", @readonly = "readonly", id = dataItem.pictureID })
+                        </div>
+                        <div class="col-2" style="text-align: center;">
+                            <p>DateTime: @dataItem.uplaodDateTime</p><br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8 offset-2" style="text-align: center;">
+                            <img src="@Url.Content(dataItem.pictureAddress)" alt="Post From @dataItem.username" class="postPicture">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 offset-4" style="text-align: center;">
+                            <br />
+                            <input type="submit" value="Delete" class="btn signup-button form-group" style="margin-left: auto; margin-right:auto;" />
+                        </div>
+                    </div>
+                    <hr style="height:6px; width:70%; margin-left:auto; margin-right:auto;" />
+                }
+            }
+        }
+    </div>
+</section>
+
+<script>
+    var post = document.querySelectorAll(".pictureID");
+    post.forEach(button => {
+        button.value = button.id;
+    });
+</script>
+

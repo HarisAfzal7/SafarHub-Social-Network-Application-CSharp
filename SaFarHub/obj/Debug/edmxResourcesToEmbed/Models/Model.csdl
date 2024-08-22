@@ -1,0 +1,353 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SaFarHubDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="FriendRequest">
+    <Key>
+      <PropertyRef Name="friendRequestID" />
+    </Key>
+    <Property Name="friendRequestID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="friendUsername" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="toWhomeRequestUsername" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="requestDateAndTime" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="User" Relationship="Self.FK__FriendReq__frien__5629CD9C" FromRole="FriendRequests" ToRole="Users" />
+    <NavigationProperty Name="User1" Relationship="Self.FK__FriendReq__toWho__571DF1D5" FromRole="FriendRequests" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="FriendTagList">
+    <Key>
+      <PropertyRef Name="taggingID" />
+    </Key>
+    <Property Name="taggingID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="postID" Type="Int32" Nullable="false" />
+    <Property Name="friendUsername" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="friendUsernameWhoIsTagged" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="notificationSeen" Type="Boolean" Nullable="false" />
+    <Property Name="clickedAndSeen" Type="Boolean" Nullable="false" />
+    <Property Name="taggedDateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="User" Relationship="Self.FK__FriendTag__frien__5BE2A6F2" FromRole="FriendTagList" ToRole="Users" />
+    <NavigationProperty Name="User1" Relationship="Self.FK__FriendTag__frien__5CD6CB2B" FromRole="FriendTagList" ToRole="Users" />
+    <NavigationProperty Name="Picture" Relationship="Self.FK__FriendTag__postI__5AEE82B9" FromRole="FriendTagList" ToRole="Pictures" />
+  </EntityType>
+  <EntityType Name="Picture">
+    <Key>
+      <PropertyRef Name="pictureID" />
+    </Key>
+    <Property Name="pictureID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="pictureAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="pictureCaption" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="uplaodDateTime" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="FriendTagLists" Relationship="Self.FK__FriendTag__postI__5AEE82B9" FromRole="Pictures" ToRole="FriendTagList" />
+    <NavigationProperty Name="User" Relationship="Self.FK__Pictures__userna__3F466844" FromRole="Pictures" ToRole="Users" />
+    <NavigationProperty Name="PicturesComments" Relationship="Self.FK__PicturesC__pictu__4AB81AF0" FromRole="Pictures" ToRole="PicturesComments" />
+    <NavigationProperty Name="PicturesLikes" Relationship="Self.FK__PicturesL__postI__44FF419A" FromRole="Pictures" ToRole="PicturesLikes" />
+  </EntityType>
+  <EntityType Name="PicturesComment">
+    <Key>
+      <PropertyRef Name="commentID" />
+    </Key>
+    <Property Name="commentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="pictureID" Type="Int32" Nullable="false" />
+    <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="commentText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="commentedDateTime" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Picture" Relationship="Self.FK__PicturesC__pictu__4AB81AF0" FromRole="PicturesComments" ToRole="Pictures" />
+    <NavigationProperty Name="User" Relationship="Self.FK__PicturesC__usern__49C3F6B7" FromRole="PicturesComments" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="PicturesLike">
+    <Key>
+      <PropertyRef Name="likeID" />
+    </Key>
+    <Property Name="likeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="postID" Type="Int32" Nullable="false" />
+    <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="clickedLikeDateTime" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Picture" Relationship="Self.FK__PicturesL__postI__44FF419A" FromRole="PicturesLikes" ToRole="Pictures" />
+    <NavigationProperty Name="User" Relationship="Self.FK__PicturesL__usern__440B1D61" FromRole="PicturesLikes" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="RecoveryReference">
+    <Key>
+      <PropertyRef Name="recoveryID" />
+    </Key>
+    <Property Name="recoveryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="recoveryEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="recoveryPhn" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="User" Relationship="Self.FK__RecoveryR__usern__4D94879B" FromRole="RecoveryReferences" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="roleID" />
+    </Key>
+    <Property Name="roleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="roleName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Users" Relationship="Self.FK__Users__role__3B75D760" FromRole="Roles" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="username" />
+    </Key>
+    <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="firstName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="lastName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="profilePicture" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="role" Type="Int32" Nullable="false" />
+    <Property Name="registrationDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="FriendRequests" Relationship="Self.FK__FriendReq__frien__5629CD9C" FromRole="Users" ToRole="FriendRequests" />
+    <NavigationProperty Name="FriendRequests1" Relationship="Self.FK__FriendReq__toWho__571DF1D5" FromRole="Users" ToRole="FriendRequests" />
+    <NavigationProperty Name="FriendTagLists" Relationship="Self.FK__FriendTag__frien__5BE2A6F2" FromRole="Users" ToRole="FriendTagList" />
+    <NavigationProperty Name="FriendTagLists1" Relationship="Self.FK__FriendTag__frien__5CD6CB2B" FromRole="Users" ToRole="FriendTagList" />
+    <NavigationProperty Name="Pictures" Relationship="Self.FK__Pictures__userna__3F466844" FromRole="Users" ToRole="Pictures" />
+    <NavigationProperty Name="PicturesComments" Relationship="Self.FK__PicturesC__usern__49C3F6B7" FromRole="Users" ToRole="PicturesComments" />
+    <NavigationProperty Name="PicturesLikes" Relationship="Self.FK__PicturesL__usern__440B1D61" FromRole="Users" ToRole="PicturesLikes" />
+    <NavigationProperty Name="RecoveryReferences" Relationship="Self.FK__RecoveryR__usern__4D94879B" FromRole="Users" ToRole="RecoveryReferences" />
+    <NavigationProperty Name="Role1" Relationship="Self.FK__Users__role__3B75D760" FromRole="Users" ToRole="Roles" />
+    <NavigationProperty Name="UsersFriends" Relationship="Self.FK__UsersFrie__frien__52593CB8" FromRole="Users" ToRole="UsersFriends" />
+    <NavigationProperty Name="UsersFriends1" Relationship="Self.FK__UsersFrie__usern__5165187F" FromRole="Users" ToRole="UsersFriends" />
+  </EntityType>
+  <EntityType Name="UsersFriend">
+    <Key>
+      <PropertyRef Name="userFriend" />
+    </Key>
+    <Property Name="userFriend" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="friendsUsername" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="User" Relationship="Self.FK__UsersFrie__frien__52593CB8" FromRole="UsersFriends" ToRole="Users" />
+    <NavigationProperty Name="User1" Relationship="Self.FK__UsersFrie__usern__5165187F" FromRole="UsersFriends" ToRole="Users" />
+  </EntityType>
+  <Association Name="FK__FriendReq__frien__5629CD9C">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="FriendRequests" Type="Self.FriendRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="username" />
+      </Principal>
+      <Dependent Role="FriendRequests">
+        <PropertyRef Name="friendUsername" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__FriendReq__toWho__571DF1D5">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="FriendRequests" Type="Self.FriendRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="username" />
+      </Principal>
+      <Dependent Role="FriendRequests">
+        <PropertyRef Name="toWhomeRequestUsername" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__FriendTag__frien__5BE2A6F2">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="FriendTagList" Type="Self.FriendTagList" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="username" />
+      </Principal>
+      <Dependent Role="FriendTagList">
+        <PropertyRef Name="friendUsername" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__FriendTag__frien__5CD6CB2B">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="FriendTagList" Type="Self.FriendTagList" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="username" />
+      </Principal>
+      <Dependent Role="FriendTagList">
+        <PropertyRef Name="friendUsernameWhoIsTagged" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__FriendTag__postI__5AEE82B9">
+    <End Role="Pictures" Type="Self.Picture" Multiplicity="1" />
+    <End Role="FriendTagList" Type="Self.FriendTagList" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pictures">
+        <PropertyRef Name="pictureID" />
+      </Principal>
+      <Dependent Role="FriendTagList">
+        <PropertyRef Name="postID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Pictures__userna__3F466844">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="Pictures" Type="Self.Picture" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="username" />
+      </Principal>
+      <Dependent Role="Pictures">
+        <PropertyRef Name="username" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PicturesC__pictu__4AB81AF0">
+    <End Role="Pictures" Type="Self.Picture" Multiplicity="1" />
+    <End Role="PicturesComments" Type="Self.PicturesComment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pictures">
+        <PropertyRef Name="pictureID" />
+      </Principal>
+      <Dependent Role="PicturesComments">
+        <PropertyRef Name="pictureID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PicturesL__postI__44FF419A">
+    <End Role="Pictures" Type="Self.Picture" Multiplicity="1" />
+    <End Role="PicturesLikes" Type="Self.PicturesLike" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pictures">
+        <PropertyRef Name="pictureID" />
+      </Principal>
+      <Dependent Role="PicturesLikes">
+        <PropertyRef Name="postID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PicturesC__usern__49C3F6B7">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="PicturesComments" Type="Self.PicturesComment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="username" />
+      </Principal>
+      <Dependent Role="PicturesComments">
+        <PropertyRef Name="username" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PicturesL__usern__440B1D61">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="PicturesLikes" Type="Self.PicturesLike" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="username" />
+      </Principal>
+      <Dependent Role="PicturesLikes">
+        <PropertyRef Name="username" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__RecoveryR__usern__4D94879B">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="RecoveryReferences" Type="Self.RecoveryReference" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="username" />
+      </Principal>
+      <Dependent Role="RecoveryReferences">
+        <PropertyRef Name="username" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Users__role__3B75D760">
+    <End Role="Roles" Type="Self.Role" Multiplicity="1" />
+    <End Role="Users" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="roleID" />
+      </Principal>
+      <Dependent Role="Users">
+        <PropertyRef Name="role" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__UsersFrie__frien__52593CB8">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="UsersFriends" Type="Self.UsersFriend" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="username" />
+      </Principal>
+      <Dependent Role="UsersFriends">
+        <PropertyRef Name="friendsUsername" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__UsersFrie__usern__5165187F">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="UsersFriends" Type="Self.UsersFriend" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="username" />
+      </Principal>
+      <Dependent Role="UsersFriends">
+        <PropertyRef Name="username" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="SaFarHubDatabaseEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="FriendRequests" EntityType="Self.FriendRequest" />
+    <EntitySet Name="FriendTagLists" EntityType="Self.FriendTagList" />
+    <EntitySet Name="Pictures" EntityType="Self.Picture" />
+    <EntitySet Name="PicturesComments" EntityType="Self.PicturesComment" />
+    <EntitySet Name="PicturesLikes" EntityType="Self.PicturesLike" />
+    <EntitySet Name="RecoveryReferences" EntityType="Self.RecoveryReference" />
+    <EntitySet Name="Roles" EntityType="Self.Role" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <EntitySet Name="UsersFriends" EntityType="Self.UsersFriend" />
+    <AssociationSet Name="FK__FriendReq__frien__5629CD9C" Association="Self.FK__FriendReq__frien__5629CD9C">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="FriendRequests" EntitySet="FriendRequests" />
+    </AssociationSet>
+    <AssociationSet Name="FK__FriendReq__toWho__571DF1D5" Association="Self.FK__FriendReq__toWho__571DF1D5">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="FriendRequests" EntitySet="FriendRequests" />
+    </AssociationSet>
+    <AssociationSet Name="FK__FriendTag__frien__5BE2A6F2" Association="Self.FK__FriendTag__frien__5BE2A6F2">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="FriendTagList" EntitySet="FriendTagLists" />
+    </AssociationSet>
+    <AssociationSet Name="FK__FriendTag__frien__5CD6CB2B" Association="Self.FK__FriendTag__frien__5CD6CB2B">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="FriendTagList" EntitySet="FriendTagLists" />
+    </AssociationSet>
+    <AssociationSet Name="FK__FriendTag__postI__5AEE82B9" Association="Self.FK__FriendTag__postI__5AEE82B9">
+      <End Role="Pictures" EntitySet="Pictures" />
+      <End Role="FriendTagList" EntitySet="FriendTagLists" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Pictures__userna__3F466844" Association="Self.FK__Pictures__userna__3F466844">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Pictures" EntitySet="Pictures" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PicturesC__pictu__4AB81AF0" Association="Self.FK__PicturesC__pictu__4AB81AF0">
+      <End Role="Pictures" EntitySet="Pictures" />
+      <End Role="PicturesComments" EntitySet="PicturesComments" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PicturesL__postI__44FF419A" Association="Self.FK__PicturesL__postI__44FF419A">
+      <End Role="Pictures" EntitySet="Pictures" />
+      <End Role="PicturesLikes" EntitySet="PicturesLikes" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PicturesC__usern__49C3F6B7" Association="Self.FK__PicturesC__usern__49C3F6B7">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="PicturesComments" EntitySet="PicturesComments" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PicturesL__usern__440B1D61" Association="Self.FK__PicturesL__usern__440B1D61">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="PicturesLikes" EntitySet="PicturesLikes" />
+    </AssociationSet>
+    <AssociationSet Name="FK__RecoveryR__usern__4D94879B" Association="Self.FK__RecoveryR__usern__4D94879B">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="RecoveryReferences" EntitySet="RecoveryReferences" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Users__role__3B75D760" Association="Self.FK__Users__role__3B75D760">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="Users" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="FK__UsersFrie__frien__52593CB8" Association="Self.FK__UsersFrie__frien__52593CB8">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="UsersFriends" EntitySet="UsersFriends" />
+    </AssociationSet>
+    <AssociationSet Name="FK__UsersFrie__usern__5165187F" Association="Self.FK__UsersFrie__usern__5165187F">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="UsersFriends" EntitySet="UsersFriends" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

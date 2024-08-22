@@ -1,0 +1,314 @@
+﻿@model SaFarHub.Models.User
+
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <!--Link for online bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!--Link for Icons-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+
+
+    <script src="~/Content/jquery.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: rgba(240, 236, 233, 0.932);
+        }
+
+        .leftColumn {
+            padding: 10px;
+            padding-left: 3rem;
+        }
+
+        .image-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+            .image-container img {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                min-width: 100%;
+                min-height: 100%;
+            }
+
+        .icon-container {
+            display: flex;
+        }
+
+            .icon-container .icons {
+                display: grid;
+                grid-template-columns: repeat(1,1fr);
+            }
+
+                .icon-container .icons .ic {
+                    cursor: pointer;
+                    font-size: 20px;
+                    padding: 0.50rem 0.78rem;
+                    border-radius: 50%;
+                    background-image: linear-gradient(to right, #002adf,#ffcc99);
+                    background-size: 200%;
+                    transition: background 0.3s ease-in-out;
+                }
+
+                    .icon-container .icons .ic:hover {
+                        background-position: right;
+                    }
+
+        .ic {
+            float: left;
+            margin-bottom: 12px;
+        }
+
+        .icons p {
+            margin-top: 10px;
+            margin-left: 55px;
+        }
+
+        body {
+            background-image: linear-gradient(to right, rgba(255,100,55,10), rgba(255,55,150,50));
+        }
+    </style>
+
+
+    <title>Home | SaFar-Hub</title>
+</head>
+<body style="margin-bottom:50px; height:2000px;">
+    <header class="fixed-top">
+        <nav class="nav navbar fixed-top sticky-top navbar-expand-sm navbar-dark bg-dark">
+            <div class="container-fluid">
+                <div class="container-fluid">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 col-sm-4">
+                            <a href="#" class="navbar-brand mb-0 h1">
+                                <img src="~/Img/Logo1.png" class="d-inline-block align-top" width="30" height="30">
+                                SaFar-Hub
+                            </a>
+                        </div>
+                        <div class="col-md-5 col-sm-8">
+                            <div>
+                                <form action="" class="d-flex">
+                                    <input type="text" class="form-control me-2" placeholder="Search user">
+                                    <button type="submit" class="btn btn-primary">Search</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#navbarNav"
+                                    class="navbar-toggler"
+                                    aria-controls="navbarNav"
+                                    aria-expanded="false"
+                                    aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbarNav">
+                                <ul class="navbar-nav ms-auto">
+                                    <li class="nav-item">
+                                        @Html.ActionLink("Home", "Home", "Users", null, new { @style = "text-decoration: none;", @class = "nav-link" })
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a href="#" class="nav-link dropdown-toggle"
+                                           id="navbarDropdown" role="button"
+                                           data-bs-toggle="dropdown"
+                                           aria-expanded="false">
+                                            Features
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <li>
+                                                <a href="#"
+                                                   class="dropdown-item">Feature #1</a>
+                                            </li>
+                                            <li>
+                                                <a href="#"
+                                                   class="dropdown-item">Feature #2</a>
+                                            </li>
+                                            <li>
+                                                <a href="#"
+                                                   class="dropdown-item">Feature #3</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="nav-item">
+                                        @Html.ActionLink("Log Out", "Index", "User", null, new { @style = "text-decoration: none;", @class = "nav-link" })
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+
+    <section class="fixed-top" style="margin-top: 76px; width:500px;">
+        <div class="row">
+            <div class="icon-container">
+                <!--Left Column of the home page-->
+                <div class="col-md-3 col-lg-3 d-none d-sm-block d-sm-none d-md-block leftColumn icons">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 d-none d-sm-block d-sm-none d-md-block">
+                            <i class="bi ic bi-controller"></i><p>Games</p>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 d-none d-sm-block d-sm-none d-md-block">
+                            <i class="bi ic bi-bank"></i><p>Marketplace</p>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 d-none d-sm-block d-sm-none d-md-block">
+                            <i class="bi ic bi-person-video2"></i><p>Watch Videos</p>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 d-none d-sm-block d-sm-none d-md-block">
+                            <a href="#"><i class="bi ic bi-people-fill"></i></a><p>Friends List</p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Center Column/Image bod of the home page-->
+            @*<div class="col-md-6 col-lg-6 d-none">
+                </div>*@
+            <!--Right Column of the home page-->
+            @*<div class="col-md-3 col-lg-3 d-none ">
+
+                </div>*@
+        </div>
+    </section>
+
+    <section class="" style="margin-top: 76px; width: 45rem; margin-left: auto; margin-right: auto; text-align:center;">
+        <div style="margin-left:auto;margin-right:auto;">
+
+            @{
+                if (ViewBag.allPost != null)
+                {
+
+                    var postCount = ViewBag.allPost.Count;
+                    var allPost = (List<SaFarHub.Models.Picture>)ViewBag.allPost;
+
+                    for (int i = 0; i < postCount; i++)
+                    {
+                        var userItem = allPost[i];
+                        <div class="container" style="margin-bottom:5px">
+                            <!--<div class="imageLoad image-container" style="height: 30rem; width: 10rem;">-->
+                            <img src="@Url.Content(userItem.pictureAddress)" alt="Picture" class="img-fluid" style="height: 40rem; width: 4000%;">
+                            <!--</div>-->
+                        </div>
+                        <div class="container" style="margin-bottom:20px">
+                            <i class="bi bi-heart" style="margin-right: 10px; color:darkred;"></i>
+
+
+
+                            <!-- HTML code for the comments container and button -->
+                            <i class="bi bi-send" style="margin-right: 10px;"></i>
+                            <button onclick="toggleComments()" style="border:none;"><i class="bi bi-chat-dots-fill" style="margin-right: 10px;"></i></button>
+                            <div class="comments-container" id="commentsContainer" style="display: none;">
+                                @*Loop through the comments and render each comment*@
+                                @foreach (var comment in ((List<SaFarHub.Models.PicturesComment>)ViewBag.postComments))
+                                {
+                                    if (comment != null)
+                                    {
+                                        if (comment.commentID == userItem.pictureID)
+                                        {
+
+                                            <div class="comment">
+                                                <span class="comment-username">@comment.username</span>
+                                                @*<span class="comment-content">@comment.com</span>*@
+
+                                            </div>
+                                        }
+                                    }
+                                }
+                                <input type="text" />
+                            </div>
+                            <!-- HTML code for the comments button -->
+
+
+
+
+                        </div>
+
+                    }
+
+                }
+            }
+        </div>
+
+        <!--<div class="row justify-content-center text-center">-->
+        <!--Left Column of the home page-->
+        <!--<div class="col-md-3 col-lg-3 d-none leftColumn">
+
+        </div>-->
+        <!--Center Column/Image bod of the home page-->
+        <!--<div class="col-md-6 col-lg-6 justify-content-center text-center">
+        </div>-->
+        <!--Right Column of the home page-->
+        <!--<div class="col-md-3 col-lg-3 d-none">
+
+            </div>
+        </div>-->
+    </section>
+
+
+    <section class="fixed-top d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block d-lg-none d-xl-block" style="width: 20%; margin-top: 76px; border: 1px solid red; float: right; margin-left: auto; padding-left:1.5%;">
+        <p>Hariss</p>
+        <p>Hariss</p>
+    </section>
+
+
+
+    <footer class="bg-dark text-white fixed-bottom">
+        <div class="container text-center text-md-left bg-dark">
+            <div class="row bg-dark">
+                <div class="row" style="margin: 10px;">
+                    <div class="col-md-2 offset-md-1 col-sm-2 offset-sm-1 col-xs-2 offset-xs-1"><a href="#" style="text-decoration: none;color: white;"><i class="bi bi-house-door-fill"></i></a></div>
+                    <div class="col-md-2 col-sm-2 col-xs-2"><a href="#" style="text-decoration: none;color: white;"><i class="bi bi-search"></i></a></div>
+                    <div class="col-md-2 col-sm-2 col-xs-2">@Html.ActionLink("Post", "Post")</div>
+                    <div class="col-md-2 col-sm-2 col-xs-2"><a href="#" style="text-decoration: none;color: white;"><i class="bi bi-person-circle"></i></a></div>
+                    <div class="col-md-2 col-sm-2 col-xs-2"><a href="#" style="text-decoration: none;color: white;"><i class="bi bi-collection-play-fill"></i></a></div>
+                    <div class="col"></div>
+                </div>
+
+            </div>
+        </div>
+
+    </footer>
+    <script>
+        function toggleComments() {
+            var commentsContainer = document.getElementById("commentsContainer");
+            if (commentsContainer.style.display === "none") {
+                commentsContainer.style.display = "block";
+            } else {
+                commentsContainer.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+</html>

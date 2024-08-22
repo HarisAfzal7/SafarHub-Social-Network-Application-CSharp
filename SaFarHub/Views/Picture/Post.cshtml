@@ -1,0 +1,389 @@
+﻿@model SaFarHub.Models.Picture
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create New Post</title>
+    <link rel="stylesheet" type="text/css" href="post.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!--Jquery script CDN path link-->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+
+    <script src="~/Content/jquery.js"></script>
+
+
+    <style>
+        /* Global Styles */
+        body {
+            background-image: url('/Images/back12.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+
+
+        /* Content Styles */
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .post-section {
+            border: 1px solid #ccc;
+            max-width: 500px;
+            min-width: 350px;
+            padding: 20px;
+            background-color: #bababa;
+            text-align: center;
+            border-radius: 20px;
+        }
+
+            .post-section h2 {
+                margin-bottom: 20px;
+                color: #333;
+            }
+
+        .post-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .post-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .post-form textarea,
+        .post-form input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .image-preview {
+            width: 100%;
+            height: 200px;
+            border-radius: 6px;
+            border: 1px solid #6c6c93;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            object-fit: cover;
+        }
+
+            .image-preview img {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: cover;
+                display: none;
+            }
+
+        .caption {
+            width: 95%;
+            padding: 10px;
+            border: 1px solid #6c6c93;
+            border-radius: 6px;
+            resize: none;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            color: #555;
+            margin-top: 5px;
+        }
+
+        .post-submit-button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            width: 200px;
+            margin-top: 15px;
+            border-radius: 5px;
+        }
+
+
+        .suggestion-dropdown {
+            position: absolute;
+            background-color: transparent;
+            width: 200px;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 1;
+        }
+
+        .suggestion-item {
+            padding: 5px;
+            cursor: pointer;
+        }
+
+            .suggestion-item:hover {
+                background-color: #e6e6e6;
+            }
+
+            .suggestion-item.active {
+                background-color: #ccc;
+            }
+
+        .suggestion-dropdown::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .suggestion-dropdown::-webkit-scrollbar-thumb {
+            background: #000000;
+            border-radius: 10px;
+        }
+        #taggedFriends{
+            display:none;
+        }
+    </style>
+
+</head>
+<body>
+    
+
+    <section class="content">
+        <div class="post-section">
+            <h4>Create New Post @Session["username"]</h4>
+
+            @using (Html.BeginForm("Post", "Picture", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <input type="text" name="@Session["username"]" id="@Session["username"]" value="@Session["username"]" disabled /><br />
+                    <label for="caption">Caption:</label><br />
+                    @Html.TextAreaFor(model => model.pictureCaption, new { @class = "caption", placeholder = "Write a caption...", rows = "3" })
+                    <ul id="taggedFriends" disable></ul>
+                    <div id="suggestionDropdown" class="suggestion-dropdown" style="display: none;"></div>
+
+                </div>
+                <div class="form-group">
+                    <label for="image">Image:</label>
+                    <div class="image-preview">
+                        <img id="preview-image" src="#" alt="Preview Image" class="img-fluid">
+                    </div>
+                    <input type="file" id="ImageFile" name="ImageFile" onchange="previewImage(event)">
+                </div>
+                <button type="submit" class="post-submit-button" id="submitButton">Post</button>
+            }
+        </div>
+
+    </section>
+
+ 
+
+    <script>
+
+        //PictureCaption
+
+        var input = document.getElementById("pictureCaption");
+        var suggestionDropdown = document.getElementById("suggestionDropdown");
+        var taggedFriendsList = document.getElementById("taggedFriends");
+        var taggedFriends = [];
+
+        var activeSuggestionIndex = -1; // Index of the active suggestion
+        var suggestions = []; // Array to store the filtered suggestions
+
+        // List of friends
+        var friends = [];
+        var similerUsernames;
+        function previewImage(event) {
+            const preview = document.getElementById('preview-image');
+            preview.src = URL.createObjectURL(event.target.files[0]);
+            preview.style.display = 'block';
+        }
+
+
+        var submitBtn = document.getElementById('submitButton');
+        submitBtn.addEventListener('click', function () {
+            // Retrieve the username from the server-side session using AJAX
+            // Continue with the AJAX request after obtaining the session value
+            $.ajax({
+                url: '/FriendTagList/InsertTaggings',
+                method: 'POST',
+                data: {
+                    //taggedUsers: JSON.stringify(taggedFriends)
+                    taggedUsers: taggedFriends
+                },
+                success: function (tagingUsersUsernames) {
+                    console.log('AJAX request successful');
+                    console.log(tagingUsersUsernames);
+
+                    // Submit the form programmatically to navigate to the target page
+                    $('form').submit();
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.log('AJAX request error');
+                    console.log(textStatus);
+                }
+            });
+        });
+
+
+
+
+        // Add an input event listener
+        input.addEventListener("input", function (event) {
+            var typedText = event.target.value;
+            var lastWord = typedText.split(" ").pop();
+
+        // Check if the last word starts with ""
+            if (lastWord.startsWith("@@")) {
+                var partialUsername = lastWord.slice(1); // Remove the "" symbol
+                $.ajax({
+                    url: "/FriendTagList/FetchTagingUsers",
+                    method: "POST",
+                    data: {
+                        partialUsername: partialUsername
+                    },
+                    success: function (tagingUsersUsernames) {
+                        //console.log("hi");
+                        console.log(tagingUsersUsernames);
+                        similerUsernames = JSON.parse(tagingUsersUsernames);
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.log("Bye", xhr, textStatus, errorThrown);
+                        // Handle any errors that occur during the AJAX request
+                    }
+                })
+
+                friends = [];
+                for (var i = 0; i < similerUsernames.SimilerUsernames.length; i++) {
+                    friends.push(similerUsernames.SimilerUsernames[i]);
+                }
+                //console.log("Not");
+
+                suggestions = friends.filter(function (friend) {
+
+                return friend.toLowerCase().startsWith(partialUsername.toLowerCase());
+            });
+
+            showSuggestions(suggestions);
+            } else {
+                hideSuggestions();
+            }
+        });
+
+        // Add a keydown event listener
+        input.addEventListener("keydown", function (event) {
+            var key = event.key;
+
+            if (suggestions.length > 0) {
+                if (key === "ArrowUp") {
+                    event.preventDefault();
+                    navigateSuggestions("up");
+                } else if (key === "ArrowDown") {
+                    event.preventDefault();
+                    navigateSuggestions("down");
+                } else if (key === "Enter") {
+                    event.preventDefault();
+                    selectSuggestion();
+                }
+            }
+        });
+
+        // Function to generate and show the suggestion dropdown
+        function showSuggestions(suggestions) {
+            suggestionDropdown.innerHTML = ""; // Clear existing suggestions
+
+            suggestions.forEach(function (suggestion, index) {
+                var suggestionItem = document.createElement("div");
+                suggestionItem.classList.add("suggestion-item");
+                suggestionItem.textContent = suggestion;
+
+                suggestionItem.addEventListener("click", function () {
+                    selectSuggestion(index);
+                });
+
+                suggestionDropdown.appendChild(suggestionItem);
+            });
+
+            suggestionDropdown.style.display = "block";
+            setActiveSuggestion(-1);
+        }
+
+        // Function to hide the suggestion dropdown
+        function hideSuggestions() {
+            suggestionDropdown.style.display = "none";
+        }
+
+        // Function to update the active suggestion
+        function setActiveSuggestion(index) {
+            var suggestionItems = suggestionDropdown.getElementsByClassName("suggestion-item");
+
+            // Remove active class from all suggestion items
+            for (var i = 0; i < suggestionItems.length; i++) {
+                suggestionItems[i].classList.remove("active");
+            }
+
+            // Add active class to the selected suggestion item
+            if (index >= 0 && index < suggestionItems.length) {
+                suggestionItems[index].classList.add("active");
+                activeSuggestionIndex = index;
+            } else {
+                activeSuggestionIndex = -1;
+            }
+        }
+
+        // Function to navigate suggestions using arrow keys
+        function navigateSuggestions(direction) {
+            var suggestionItems = suggestionDropdown.getElementsByClassName("suggestion-item");
+            var maxIndex = suggestionItems.length - 1;
+
+            if (direction === "up") {
+                if (activeSuggestionIndex === -1) {
+                    setActiveSuggestion(maxIndex);
+                } else if (activeSuggestionIndex === 0) {
+                    setActiveSuggestion(-1);
+                } else {
+                    setActiveSuggestion(activeSuggestionIndex - 1);
+                }
+            } else if (direction === "down") {
+                if (activeSuggestionIndex === -1) {
+                    setActiveSuggestion(0);
+                } else if (activeSuggestionIndex === maxIndex) {
+                    setActiveSuggestion(-1);
+                } else {
+                    setActiveSuggestion(activeSuggestionIndex + 1);
+                }
+            }
+        }
+
+        // Function to select a suggestion
+        function selectSuggestion(index = activeSuggestionIndex) {
+            if (index >= 0 && index < suggestions.length) {
+                var suggestion = suggestions[index];
+                var typedText = input.value;
+                var lastWordStartIndex = typedText.lastIndexOf("@@");
+                var updatedText =
+                typedText.substring(0, lastWordStartIndex) + "@@" + suggestion + " ";
+                input.value = updatedText;
+                hideSuggestions();
+                taggedFriends.push(suggestion);
+                console.log("Tagged Friends: ",taggedFriends);
+                updateTaggedFriendsList();
+            }
+        }
+
+        // Function to update the tagged friends list
+        function updateTaggedFriendsList() {
+            taggedFriendsList.innerHTML = ""; // Clear the list
+
+            taggedFriends.forEach(function (friend) {
+                var listItem = document.createElement("li");
+                listItem.textContent = friend;
+
+                taggedFriendsList.appendChild(listItem);
+            });
+        }
+
+
+    </script>
+</body>
+</html>
